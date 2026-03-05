@@ -1,0 +1,12 @@
+#old code start
+#kem_alg: ["X25519", "kyber512"]
+#sig_alg: ["rsa:2048", "dilithium2"]
+#old code end
+
+#new code start
+# Define the small test KEM and signature set using OpenSSL/oqs-provider names
+kem_alg: ["X25519", "MLKEM512"]
+sig_alg: ["rsa:2048", "MLDSA44"]
+#new code end
+
+tc: ['']

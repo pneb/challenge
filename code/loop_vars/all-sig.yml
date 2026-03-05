@@ -1,0 +1,15 @@
+kem_alg: ["X25519"]
+#old code start
+#sig_alg: ["dilithium2", "dilithium2_aes", "dilithium3", "dilithium3_aes", "dilithium5", "dilithium5_aes", "falcon512", "falcon1024", "sphincsharaka128fsimple", "sphincsharaka192fsimple", "sphincsharaka256fsimple", "p256_dilithium2", "rsa3072_dilithium2", "p384_dilithium3", "p521_dilithium5", "p256_falcon512",  "p521_falcon1024", "p256_sphincsharaka128fsimple", "p384_sphincsharaka192fsimple", "p521_sphincsharaka256fsimple","rsa:1024", "rsa:2048", "rsa:3072", "rsa:4096"]
+#old code end
+
+#new code start
+# Define the full signature list using OpenSSL/oqs-provider names
+# dilithium2 = MLDSA44
+# dilithium3 = MLDSA65
+# dilithium4 = MLDSA87
+# dilithium{x}_aes is not available anymore becaue it was pruned during the NIST competition
+# the authors used sphincsharaka because it was the fastest sphincs version -> does it make sense to use another version???
+sig_alg: ["MLDSA44", "MLDSA65", "MLDSA87", "falcon512", "falcon1024", "p256_mldsa44", "rsa3072_mldsa44", "p384_mldsa65", "p521_mldsa87", "p256_falcon512", "p521_falcon1024", "rsa:1024", "rsa:2048", "rsa:3072", "rsa:4096"]
+#new code end
+tc: ['']

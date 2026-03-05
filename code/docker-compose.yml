@@ -1,0 +1,110 @@
+version: "3.8"
+
+services:
+  client:
+    build:
+      context: docker/clientserver
+      args:
+      #old code start
+        #OPENSSL_REPO: "https://github.com/tumi8/openssl-pqc.git"
+        #OPENSSL_BRANCH: "basic-sphincs-psh"
+        #LIBOQS_COMMIT: "2e2ddb4e0493014694820471396984b30d59cf97"
+      #old code end
+      #new code start
+      #Build args select OpenSSL/liboqs/oqs-provider versions for the client image
+        OPENSSL_REPO: "https://github.com/openssl/openssl.git"
+        OPENSSL_COMMIT: "7b371d80d959ec9ab4139d09d78e83c090de9779"
+        LIBOQS_REPO: "https://github.com/open-quantum-safe/liboqs.git"
+        LIBOQS_COMMIT: "0.15.0"
+        OQSPROVIDER_REPO: "https://github.com/pneb/oqs-provider.git"
+        OQSPROVIDER_COMMIT: "82d935c6054f6b5ef914f9ce22d9528020a2ae3d"
+      #new code end
+        CPU_PROFILING: "${CPU_PROFILING}"
+    privileged: true
+    entrypoint: /opt/measurement-openssl-client.sh
+    environment:
+      - KEM_ALG=${KEM_ALG}
+      - SIG_ALG=${SIG_ALG}
+      - RUN=${RUN}
+      - MEASUREMENT_TIME=60
+      - CPU_PROFILING=${CPU_PROFILING}
+      - NETEM_TC=${NETEM_TC}
+    volumes:
+      - type: volume
+        source: cert-data
+        target: /opt/shared
+      - type: bind
+        source: ${HOST_DIR}/client
+        target: /out
+  server:
+    build:
+      context: docker/clientserver
+      args:
+        #old code start
+        #OPENSSL_REPO: "https://github.com/tumi8/openssl-pqc.git"
+        #OPENSSL_BRANCH: "basic-sphincs-psh"
+        #LIBOQS_COMMIT: "2e2ddb4e0493014694820471396984b30d59cf97"
+        #old code end
+        #new code start
+        #Build args select OpenSSL/liboqs/oqs-provider versions for the server image
+        OPENSSL_REPO: "https://github.com/openssl/openssl.git"
+        OPENSSL_COMMIT: "7b371d80d959ec9ab4139d09d78e83c090de9779"
+        LIBOQS_REPO: "https://github.com/open-quantum-safe/liboqs.git"
+        LIBOQS_COMMIT: "0.15.0"
+        OQSPROVIDER_REPO: "https://github.com/pneb/oqs-provider.git"
+        OQSPROVIDER_COMMIT: "82d935c6054f6b5ef914f9ce22d9528020a2ae3d"
+        #new code end
+        CPU_PROFILING: "${CPU_PROFILING}"
+    privileged: true
+    entrypoint: /opt/measurement-openssl-server.sh
+    environment:
+      - KEM_ALG=${KEM_ALG}
+      - SIG_ALG=${SIG_ALG}
+      - RUN=${RUN}
+      - CPU_PROFILING=${CPU_PROFILING}
+      - NETEM_TC=${NETEM_TC}
+    volumes:
+      - type: volume
+        source: cert-data
+        target: /opt/shared
+      - type: bind
+        source: ${HOST_DIR}/server
+        target: /out
+  post-processor:
+    build: docker/post-processor
+    entrypoint: ["/opt/run.sh", "/srv/client/latencies-post_run${RUN}.pcap", "/srv/server/latencies-pre_run${RUN}.pcap"]
+    environment:
+      - RUN=${RUN}
+    volumes:
+      - type: bind
+        source: ${HOST_DIR}
+        target: /srv/
+  pre-analyzer:
+    build:
+      context: .
+    environment:
+      - CPU_PROFILING=${CPU_PROFILING}
+      - PARALLEL_JOBS=100%
+    volumes:
+      - type: bind
+        source: ${HOST_DIR}
+        target: /srv/
+      - type: bind
+        source: ${OUT_DIR}
+        target: /out/
+  final-analyzer:
+    build: finalization
+    environment:
+      - EXPERIMENT=${EXPERIMENT}
+      - CPU_PROFILING=${CPU_PROFILING}
+      - DEVIATION_ANALYSIS=${DEVIATION_ANALYSIS}
+    volumes:
+      - type: bind
+        source: ${HOST_DIR}
+        target: /srv/
+      - type: bind
+        source: ${OUT_DIR}
+        target: /out/
+
+volumes:
+  cert-data:

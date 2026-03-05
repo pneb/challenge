@@ -1,0 +1,11 @@
+#old code start
+#kem_alg: ["X25519", "kyber90s1024", "kyber1024", "hqc256", "p521_kyber1024", "p521_hqc256", "secp521r1"]
+#sig_alg: ["dilithium5", "dilithium5_aes", "falcon1024", "sphincsharaka256fsimple", "p521_dilithium5", "p521_falcon1024","p521_sphincsharaka256fsimple", "rsa:2048", "rsa:4096"]
+#old code end
+
+#new code start
+# Define level-5 KEM and signature sets just like in the paper (!!!)
+kem_alg: ["X25519", "MLKEM1024", "p521_mlkem1024", "secp521r1"]
+sig_alg: ["MLDSA87", "falcon1024", "p521_mldsa87", "p521_falcon1024", "rsa:2048", "rsa:4096"]
+#new code end
+tc: ['']
