@@ -12,8 +12,8 @@ services:
       #old code end
       #new code start
       #Build args select OpenSSL/liboqs/oqs-provider versions for the client image
-        OPENSSL_REPO: "https://github.com/openssl/openssl.git"
-        OPENSSL_COMMIT: "7b371d80d959ec9ab4139d09d78e83c090de9779"
+        OPENSSL_REPO: "https://github.com/pneb/openssl.git"
+        OPENSSL_COMMIT: "a1e602caf9270844d6f9909a94efc850c6750a7c"
         LIBOQS_REPO: "https://github.com/open-quantum-safe/liboqs.git"
         LIBOQS_COMMIT: "0.15.0"
         OQSPROVIDER_REPO: "https://github.com/pneb/oqs-provider.git"
@@ -47,8 +47,8 @@ services:
         #old code end
         #new code start
         #Build args select OpenSSL/liboqs/oqs-provider versions for the server image
-        OPENSSL_REPO: "https://github.com/openssl/openssl.git"
-        OPENSSL_COMMIT: "7b371d80d959ec9ab4139d09d78e83c090de9779"
+        OPENSSL_REPO: "https://github.com/pneb/openssl.git"
+        OPENSSL_COMMIT: "a1e602caf9270844d6f9909a94efc850c6750a7c"
         LIBOQS_REPO: "https://github.com/open-quantum-safe/liboqs.git"
         LIBOQS_COMMIT: "0.15.0"
         OQSPROVIDER_REPO: "https://github.com/pneb/oqs-provider.git"
